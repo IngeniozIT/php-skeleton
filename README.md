@@ -24,7 +24,7 @@ It contains pretty much everything you need to start a new project :
 To create a new project based on this skeleton, run the following command (replace `{INSTALLATION_DIRECTORY}` with the directory where you want to install the project) :
 
 ```bash
-composer create-project ingenioz-it/skeleton {INSTALLATION_DIRECTORY}
+composer create-project ingenioz-it/php-skeleton {INSTALLATION_DIRECTORY}
 ```
 
 ## Make sure everything works
