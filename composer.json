@@ -1,0 +1,82 @@
+{
+    "name": "ingenioz-it/php-skeleton",
+    "description": "A clean new PHP project",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "IngeniozIT",
+            "email": "contact@ingenioz.it"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "squizlabs/php_codesniffer": "*",
+        "phpstan/phpstan": "*",
+        "vimeo/psalm": "*",
+        "phan/phan": "*",
+        "infection/infection": "*",
+        "phpmd/phpmd": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "IngeniozIt\\Skeleton\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IngeniozIT\\Skeleton\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "serve": "php -S localhost:8000 index.php",
+        "test": "vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
+        "testdox": "@test --testdox",
+        "test-xdebug": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
+        "coverage-html": "@test-xdebug --coverage-html ./doc",
+        "coverage-xml": "@test-xdebug --coverage-clover ./tmp/coverage.xml",
+        "quality:phpcs": "vendor/bin/phpcs --standard=./quality/phpcs.xml.dist",
+        "quality:phpstan": "vendor/bin/phpstan analyze -c ./quality/phpstan.neon.dist",
+        "quality:psalm": "vendor/bin/psalm --no-cache --config ./quality/psalm.xml.dist",
+        "quality:phan": "vendor/bin/phan --config-file ./quality/phan.php",
+        "quality:phan-silent": "vendor/bin/phan --no-progress-bar --config-file ./quality/phan.php",
+        "quality:infection": "vendor/bin/infection --configuration=./quality/infection.json.dist",
+        "quality:phpmd": "vendor/bin/phpmd src/,tests/ text quality/phpmd.xml.dist",
+        "fulltest": [
+            "@test",
+            "@quality:infection",
+            "@quality:phpcs",
+            "@quality:phpmd",
+            "@quality:phpstan",
+            "@quality:psalm",
+            "@quality:phan",
+            "echo 'OK'"
+        ]
+    },
+    "scripts-descriptions": {
+        "serve": "Run a local web server",
+        "test": "Run unit tests",
+        "testdox": "Run unit tests with testdox output",
+        "test-xdebug": "Run unit tests with Xdebug enabled",
+        "coverage-html": "Generate HTML code coverage report",
+        "coverage-xml": "Generate XML code coverage report",
+        "quality:phpcs": "Run PHP Code Sniffer",
+        "quality:phpstan": "Run PHPStan",
+        "quality:psalm": "Run Psalm",
+        "quality:phan": "Run Phan",
+        "quality:phan-silent": "Run Phan without progress bar",
+        "quality:infection": "Run Infection",
+        "fulltest": "Run all tests",
+        "quality:phpmd": "Run PHP Mess Detector"
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    }
+}
