@@ -95,6 +95,12 @@ composer fulltest
 
 Runs the full set of tests (unit tests, static analysis tools and mutation testing).
 
+```bash
+composer quality:clean
+```
+
+Runs phpcbf to automatically fix code formatting issues.
+
 ## Technical details
 
 - The configuration files for the quality tools are located inside the `quality/` directory.
