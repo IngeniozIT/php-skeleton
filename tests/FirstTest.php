@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IngeniozIT\Skeleton\Tests;
 
 use PHPUnit\Framework\TestCase;
-use IngeniozIt\Skeleton\HelloWorld;
+use IngeniozIT\Skeleton\HelloWorld;
 
 class FirstTest extends TestCase
 {
