@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IngeniozIt\\Skeleton\\": "src/"
+            "IngeniozIT\\Skeleton\\": "src/"
         }
     },
     "autoload-dev": {
