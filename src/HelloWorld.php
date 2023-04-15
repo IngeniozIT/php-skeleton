@@ -1,6 +1,6 @@
 <?php
 
-namespace IngeniozIt\Skeleton;
+namespace IngeniozIT\Skeleton;
 
 class HelloWorld
 {
