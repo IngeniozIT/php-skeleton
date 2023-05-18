@@ -6,8 +6,8 @@
         ]
     },
     "logs": {
-        "text": "./tmp/infection.txt",
-        "html": "./tmp/infection.html"
+        "text": "../tmp/infection.txt",
+        "html": "../tmp/infection.html"
     },
     "mutators": {
         "@default": true
