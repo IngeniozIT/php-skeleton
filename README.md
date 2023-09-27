@@ -47,13 +47,12 @@ OK
 
 **You are now ready to start !**
 
-## Then you might want to
+## Customize your app
 
 Make the project truly yours by doing the following:
 
 ### Inside `composer.json`
 - [ ] Update the `name`, `description`, `authors` and `license` fields with your project's information
-- [ ] Update the `autoload` field with the namespace of your choice (make sure you also change the namespace in `src/HelloWorld.php` and `tests/FirstTest.php` accordingly)
 
 ### Inside other files
 - [ ] Update the `README.md` file to decribe your project
@@ -100,6 +99,13 @@ composer quality:clean
 ```
 
 Runs phpcbf to automatically fix code formatting issues.
+
+```bash
+composer quality:refactor
+```
+
+Runs Rector to automatically refactor your code.  
+**Warning:** This is a very powerful tool that can break your code. Use `composer quality:refactor-dry` to preview the changes before applying them.
 
 ## Technical details
 
