@@ -26,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "IngeniozIT\\Skeleton\\": "src/"
+            "App\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "IngeniozIT\\Skeleton\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {

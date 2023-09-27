@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace IngeniozIT\Skeleton\Tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use IngeniozIT\Skeleton\HelloWorld;
+use App\HelloWorld;
 
 final class FirstTest extends TestCase
 {

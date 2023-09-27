@@ -1,6 +1,6 @@
 <?php
 
-namespace IngeniozIT\Skeleton;
+namespace App;
 
 final class HelloWorld
 {
