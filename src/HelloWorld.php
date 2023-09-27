@@ -2,7 +2,7 @@
 
 namespace IngeniozIT\Skeleton;
 
-class HelloWorld
+final class HelloWorld
 {
     public function sayHello(): string
     {

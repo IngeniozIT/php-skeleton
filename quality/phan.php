@@ -25,6 +25,7 @@ return [
         'WhitespacePlugin',
         'PHPDocRedundantPlugin',
     ],
+    'exclude_file_regex' => '#vendor/rector/rector/stubs-rector/.*#',
     'plugin_config' => [
         'php_native_syntax_check_max_processes' => 4,
     ],

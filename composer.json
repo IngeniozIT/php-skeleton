@@ -21,7 +21,8 @@
         "vimeo/psalm": "*",
         "phan/phan": "*",
         "infection/infection": "*",
-        "phpmd/phpmd": "*"
+        "phpmd/phpmd": "*",
+        "rector/rector": "^0.18.4"
     },
     "autoload": {
         "psr-4": {
@@ -41,6 +42,8 @@
         "coverage-html": "@test-xdebug --coverage-html ./doc",
         "coverage-xml": "@test-xdebug --coverage-clover ./tmp/coverage.xml",
         "quality:clean": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
+        "quality:refactor": "vendor/bin/rector process --config ./quality/rector.php",
+        "quality:refactor-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run",
         "quality:phpcs": "vendor/bin/phpcs --standard=./quality/phpcs.xml.dist",
         "quality:phpstan": "vendor/bin/phpstan analyze -c ./quality/phpstan.neon.dist",
         "quality:psalm": "vendor/bin/psalm --no-cache --config ./quality/psalm.xml.dist",
@@ -67,14 +70,16 @@
         "coverage-html": "Generate HTML code coverage report",
         "coverage-xml": "Generate XML code coverage report",
         "quality:clean": "Clean code with PHP Code Beautifier and Fixer",
+        "quality:refactor": "Refactor code with Rector",
+        "quality:refactor-dry": "Dry-run Rector",
         "quality:phpcs": "Run PHP Code Sniffer",
         "quality:phpstan": "Run PHPStan",
         "quality:psalm": "Run Psalm",
         "quality:phan": "Run Phan",
         "quality:phan-silent": "Run Phan without progress bar",
         "quality:infection": "Run Infection",
-        "fulltest": "Run all tests",
-        "quality:phpmd": "Run PHP Mess Detector"
+        "quality:phpmd": "Run PHP Mess Detector",
+        "fulltest": "Run all tests"
     },
     "config": {
         "allow-plugins": {

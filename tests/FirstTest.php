@@ -7,7 +7,7 @@ namespace IngeniozIT\Skeleton\Tests;
 use PHPUnit\Framework\TestCase;
 use IngeniozIT\Skeleton\HelloWorld;
 
-class FirstTest extends TestCase
+final class FirstTest extends TestCase
 {
     public function testHelloWorld(): void
     {
