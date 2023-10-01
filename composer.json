@@ -22,7 +22,7 @@
         "phan/phan": "*",
         "infection/infection": "*",
         "phpmd/phpmd": "*",
-        "rector/rector": "^0.18.4"
+        "rector/rector": "*"
     },
     "autoload": {
         "psr-4": {
