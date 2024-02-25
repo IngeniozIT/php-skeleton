@@ -25,8 +25,8 @@ It contains pretty much everything you need to start a new project :
   - An automated refactoring tool ([Rector](https://github.com/rectorphp/rector)) to help you keep your code up to date
   - Composer scripts to easily use all the above
 - **Infra**
-  - **[NEW]** Docker support
-    - A Makefile to manage it with ease
+  - Docker support
+    - A Makefile to manage docker commands with ease
   - GitHub workflows to automatically run the tests and quality tools on every push and pull request
     - It also uploads a code coverage report to [CodeCov](https://codecov.io/)
 
@@ -113,7 +113,7 @@ The project comes with a `Makefile` to help you manage your Docker container:
 - `make restart` : Restarts the Docker container
 - `make rebuild` : Rebuilds the Docker image and restarts the container
 - `make remove` : Removes the Docker container
-- `make cli` : Runs a shell inside the Docker container (useful to run the various composer scripts)
+- `make cli` : Access a command line the container (useful to run the various composer scripts)
 - `make logs` : Displays the logs of the Docker container
 - `make clean` : Cleans the docker environment
 

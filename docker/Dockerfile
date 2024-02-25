@@ -1,5 +1,5 @@
 # Use the official PHP 8.2 image with Apache
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 # Install system dependencies and PHP extensions required for most PHP projects
 RUN apt-get update && apt-get install -y \
