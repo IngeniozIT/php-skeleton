@@ -1,17 +1,23 @@
-IMAGE_NAME=php-app
-CONTAINER_NAME=php_app_container
+# load the .env
+-include infra/.env.dist
+-include infra/.env
+
+PROJECT_NAME=$(shell grep '"name"' composer.json | head -1 | sed 's/.*"name":\s*"\([^"]*\)".*/\1/' | sed 's/\//-/g')-${PROJECT_TYPE}
+
+# dockerfile + env
+DOCKERFILE=infra/${PROJECT_TYPE}.Dockerfile
 
 # Build the Docker image
 build:
-	@docker build -t $(IMAGE_NAME) -f docker/Dockerfile .
+	@docker build -t $(PROJECT_NAME) -f $(DOCKERFILE) .
 
 # Start the Docker container. If it's already running, stop and remove the previous instance.
 start: remove
-	@docker run -d -p 8080:80 --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	@docker run -d -p 8080:80 --name $(PROJECT_NAME) -v $(PWD):/var/www/html $(PROJECT_NAME)
 
 # Stop the Docker container
 stop:
-	@docker ps -q --filter "name=$(CONTAINER_NAME)" | grep -q . && docker stop $(CONTAINER_NAME) || true
+	@docker ps -q --filter "name=$(PROJECT_NAME)" | grep -q . && docker stop $(PROJECT_NAME) || true
 
 # Restart the Docker container
 restart: stop start
@@ -21,15 +27,15 @@ rebuild: stop build start
 
 # Remove the Docker container
 remove: stop
-	@docker ps -a -q --filter "name=$(CONTAINER_NAME)" | grep -q . && docker rm $(CONTAINER_NAME) || true
+	@docker ps -a -q --filter "name=$(PROJECT_NAME)" | grep -q . && docker rm $(PROJECT_NAME) || true
 
 # Access the Docker image's CLI
 cli:
-	@docker exec -it $(CONTAINER_NAME) /bin/bash
+	@docker exec -it $(PROJECT_NAME) /bin/bash
 
 # Show the Docker container's logs
 logs:
-	@docker logs -f $(CONTAINER_NAME)
+	@docker logs -f $(PROJECT_NAME)
 
 # Clean the Docker system
 clean:

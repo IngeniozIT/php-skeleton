@@ -12,7 +12,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3"
+        "php": ">=8.4"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
@@ -31,7 +31,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "App\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -44,24 +44,24 @@
         "test-xdebug": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
         "coverage-html": "@test-xdebug --coverage-html ./doc",
         "coverage-xml": "@test-xdebug --coverage-clover ./tmp/coverage.xml",
-        "quality:clean": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
-        "quality:refactor": "vendor/bin/rector process --config ./quality/rector.php",
-        "quality:refactor-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run",
-        "quality:phpcs": "vendor/bin/phpcs --standard=./quality/phpcs.xml.dist",
-        "quality:phpstan": "vendor/bin/phpstan analyze -c ./quality/phpstan.neon.dist",
-        "quality:psalm": "vendor/bin/psalm --no-cache --config ./quality/psalm.xml.dist",
-        "quality:phan": "vendor/bin/phan --config-file ./quality/phan.php",
-        "quality:phan-silent": "vendor/bin/phan --no-progress-bar --config-file ./quality/phan.php",
-        "quality:infection": "vendor/bin/infection --configuration=./quality/infection.json.dist",
-        "quality:phpmd": "vendor/bin/phpmd src/,tests/ text quality/phpmd.xml.dist",
+        "phpcbf": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
+        "rector": "vendor/bin/rector process --config ./quality/rector.php",
+        "rector-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run",
+        "phpcs": "vendor/bin/phpcs --standard=./quality/phpcs.xml.dist",
+        "phpstan": "vendor/bin/phpstan analyze -c ./quality/phpstan.neon.dist",
+        "psalm": "vendor/bin/psalm --no-cache --config ./quality/psalm.xml.dist",
+        "phan": "php -d extension=ast.so -d extension=pcntl.so -n vendor/bin/phan --config-file ./quality/phan.php",
+        "phan-silent": "vendor/bin/phan --no-progress-bar --config-file ./quality/phan.php",
+        "infection": "vendor/bin/infection -j$(nproc) --configuration=./quality/infection.json.dist",
+        "phpmd": "vendor/bin/phpmd src/,tests/ text quality/phpmd.xml.dist",
         "fulltest": [
             "@test",
-            "@quality:infection",
-            "@quality:phpcs",
-            "@quality:phpmd",
-            "@quality:phpstan",
-            "@quality:psalm",
-            "@quality:phan",
+            "@infection",
+            "@phpcs",
+            "@phpmd",
+            "@phpstan",
+            "@psalm",
+            "@phan",
             "echo 'OK'"
         ]
     },
@@ -72,16 +72,16 @@
         "test-xdebug": "Run unit tests with Xdebug enabled",
         "coverage-html": "Generate HTML code coverage report",
         "coverage-xml": "Generate XML code coverage report",
-        "quality:clean": "Clean code with PHP Code Beautifier and Fixer",
-        "quality:refactor": "Refactor code with Rector",
-        "quality:refactor-dry": "Dry-run Rector",
-        "quality:phpcs": "Run PHP Code Sniffer",
-        "quality:phpstan": "Run PHPStan",
-        "quality:psalm": "Run Psalm",
-        "quality:phan": "Run Phan",
-        "quality:phan-silent": "Run Phan without progress bar",
-        "quality:infection": "Run Infection",
-        "quality:phpmd": "Run PHP Mess Detector",
+        "phpcbf": "Clean code with PHP Code Beautifier and Fixer",
+        "rector": "Refactor code with Rector",
+        "rector-dry": "Dry-run Rector",
+        "phpcs": "Run PHP Code Sniffer",
+        "phpstan": "Run PHPStan",
+        "psalm": "Run Psalm",
+        "phan": "Run Phan",
+        "phan-silent": "Run Phan without progress bar",
+        "infection": "Run Infection",
+        "phpmd": "Run PHP Mess Detector",
         "fulltest": "Run all tests"
     },
     "config": {

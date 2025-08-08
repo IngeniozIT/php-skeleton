@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'target_php_version' => '8.3',
+    'target_php_version' => '8.4',
+    'processes' => 16,
     'directory_list' => [
         'src/',
         'tests/',

@@ -40,14 +40,11 @@ composer create-project ingenioz-it/php-skeleton {PROJECT_NAME}
 
 ## Requirements
 
-- docker
-- make (optional)
+- docker + make
 
 OR
 
-- PHP 8.2 or higher
-- composer
-- xdebug
+- PHP 8.4 + composer + xdebug
 
 ## Getting started
 
@@ -98,9 +95,9 @@ You can view their description inside the `composer.json` file (look for `script
 - `composer serve`: Runs a local web server on port 8000. Run this command and go to http://localhost:8000 to see the magic happen.
 - `composer testdox`: Runs the unit tests using the `testdox` format (it's better looking than the default one).
 - `composer coverage-html`: Generates a code coverage report in HTML format inside the `doc/` directory.
-- `composer quality:infection`: Generates a mutation testing report in HTML format at `tmp/infection.html`.
-- `composer quality:clean`: Runs phpcbf to automatically fix code formatting issues.
-- `composer quality:refactor`: Runs Rector to automatically refactor your code. **Warning:** This is a very powerful tool that can break your code. Use `composer quality:refactor-dry` to preview the changes before applying them.
+- `composer qualy:infection`: Generates a mutation testing report in HTML format at `tmp/infection.html`.
+- `composer clean`: Runs phpcbf to automatically fix code formatting issues.
+- `composer refactor`: Runs Rector to automatically refactor your code. **Warning:** This is a very powerful tool that can break your code. Use `composer refactor-dry` to preview the changes before applying them.
 - `composer fulltest`: Runs the full set of tests (unit tests, static analysis tools and mutation testing).
 
 ## Docker

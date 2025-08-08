@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
-final class HelloWorld
+final readonly class HelloWorld
 {
-    public function sayHello(): string
+    public function helloWorld(): string
     {
-        return 'Hello World!';
+        return 'Hello World';
     }
 }
