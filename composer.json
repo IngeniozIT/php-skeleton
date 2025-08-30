@@ -31,19 +31,18 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "App\\": "src/"
         }
     },
     "scripts": {
         "serve": [
             "Composer\\Config::disableProcessTimeout",
-            "php -S localhost:8000 index.php"
+            ". infra/.env && php -S localhost:${WEB_PORT} public/index.php"
         ],
         "test": "vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
         "testdox": "@test --testdox",
-        "test-xdebug": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
-        "coverage-html": "@test-xdebug --coverage-html ./doc",
-        "coverage-xml": "@test-xdebug --coverage-clover ./tmp/coverage.xml",
+        "coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-html ./tmp/code-coverage",
+        "coverage-xml": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-clover ./tmp/code-coverage/coverage.xml",
         "phpcbf": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
         "rector": "vendor/bin/rector process --config ./quality/rector.php",
         "rector-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run",
@@ -52,8 +51,13 @@
         "psalm": "vendor/bin/psalm --no-cache --config ./quality/psalm.xml.dist",
         "phan": "php -d extension=ast.so -d extension=pcntl.so -n vendor/bin/phan --config-file ./quality/phan.php",
         "phan-silent": "vendor/bin/phan --no-progress-bar --config-file ./quality/phan.php",
-        "infection": "vendor/bin/infection -j$(nproc) --configuration=./quality/infection.json.dist",
-        "phpmd": "vendor/bin/phpmd src/,tests/ text quality/phpmd.xml.dist",
+        "infection": "XDEBUG_MODE=coverage vendor/bin/infection -j$(nproc) --configuration=./quality/infection.json.dist",
+        "phpmd": "vendor/bin/phpmd src/ text quality/phpmd.xml.dist",
+        "doc": [
+            "@coverage-html",
+            "@infection",
+            "echo 'OK'"
+        ],
         "fulltest": [
             "@test",
             "@infection",
@@ -69,20 +73,20 @@
         "serve": "Run a local web server",
         "test": "Run unit tests",
         "testdox": "Run unit tests with testdox output",
-        "test-xdebug": "Run unit tests with Xdebug enabled",
-        "coverage-html": "Generate HTML code coverage report",
-        "coverage-xml": "Generate XML code coverage report",
-        "phpcbf": "Clean code with PHP Code Beautifier and Fixer",
+        "fulltest": "Run all quality tools",
+        "doc": "Generate documentation",
+        "coverage-html": "Generate HTML coverage report",
+        "coverage-xml": "Generate XML coverage report",
+        "phpcbf": "Run phpcbf",
+        "phpcs": "Run phpcs",
+        "phpstan": "Run phpstan",
+        "psalm": "Run psalm",
+        "phan": "Run phan",
+        "phan-silent": "Run phan without progress bar",
+        "infection": "Run infection",
+        "phpmd": "Run phpmd",
         "rector": "Refactor code with Rector",
-        "rector-dry": "Dry-run Rector",
-        "phpcs": "Run PHP Code Sniffer",
-        "phpstan": "Run PHPStan",
-        "psalm": "Run Psalm",
-        "phan": "Run Phan",
-        "phan-silent": "Run Phan without progress bar",
-        "infection": "Run Infection",
-        "phpmd": "Run PHP Mess Detector",
-        "fulltest": "Run all tests"
+        "rector-dry": "Dry-run Rector"
     },
     "config": {
         "allow-plugins": {

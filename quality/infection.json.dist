@@ -3,11 +3,14 @@
     "source": {
         "directories": [
             "./src"
+        ],
+        "excludes": [
+            "/Test\\.php/"
         ]
     },
     "logs": {
-        "text": "../tmp/infection.txt",
-        "html": "../tmp/infection.html"
+        "text": "../tmp/mutation-testing/infection.txt",
+        "html": "../tmp/mutation-testing/infection.html"
     },
     "mutators": {
         "@default": true

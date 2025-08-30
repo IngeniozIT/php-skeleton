@@ -1,0 +1,9 @@
+vendor/
+tmp/
+doc/
+
+infra/.env
+
+.idea/
+.vscode/
+.cursorignore

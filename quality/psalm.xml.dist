@@ -18,7 +18,6 @@
 >
     <projectFiles>
         <directory name="../src" />
-        <directory name="../tests" />
     </projectFiles>
     <extraFiles>
         <directory name="../vendor" />

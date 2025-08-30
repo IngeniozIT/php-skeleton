@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App;
 
 use PHPUnit\Framework\TestCase;
 use App\HelloWorld;
 
-final class FirstTest extends TestCase
+final class HelloWorldTest extends TestCase
 {
     public function testHelloWorld(): void
     {

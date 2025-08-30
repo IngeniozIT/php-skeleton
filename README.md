@@ -9,8 +9,7 @@
 - [Installation](#installation)
 - [Requirements](#requirements)
 - [Getting started](#getting-started)
-- [Code quality](#code-quality)
-- [Docker](#docker)
+- [Scripts](#scripts)
 - [Customize your app](#customize-your-app)
 
 ## Description
@@ -24,7 +23,7 @@ It contains pretty much everything you need to start a new project :
   - A mutation testing framework ([Infection](https://github.com/infection/infection)) to enforce the quality of your tests
   - An automated refactoring tool ([Rector](https://github.com/rectorphp/rector)) to help you keep your code up to date
   - Composer scripts to easily use all the above
-- **Infra**
+- **Infrastructure**
   - Docker support
     - A Makefile to manage docker commands with ease
   - GitHub workflows to automatically run the tests and quality tools on every push and pull request
@@ -40,79 +39,45 @@ composer create-project ingenioz-it/php-skeleton {PROJECT_NAME}
 
 ## Requirements
 
-- docker + make
-
-OR
-
-- PHP 8.4 + composer + xdebug
+PHP 8.4+ or Docker.
 
 ## Getting started
 
-I suggest you run the full set of tests to make sure everything is working correctly:
+### 0. (if you are using docker)
 
-### 1. Move to your new project.
-
-```bash
-cd {PROJECT_NAME}
-```
-
-### 2. Setup the project
-
-#### If you are using Docker
+Create the Docker container and start a shell inside it:
 
 ```bash
-make build && make start && make cli
+make cli
 ```
 
-*This will build the Docker image and start a shell inside the container (use `exit` to go back to your local terminal).*
-
-#### If you are NOT using Docker
+### 1. Install the dependencies
 
 ```bash
 composer install
 ```
 
-### 3. Finally, run the tests
+### 2. Run the tests
 
 ```bash
-composer fulltest
+make test
 ```
 
-The last line should be:
+### 3. Time to code
 
-```
-OK
-```
+The previous steps went well ?
 
 **You are now ready to start coding !**
 
-## Code quality
+## Scripts
 
-The project comes with a few useful composer scripts to help you work with it.
+The project comes with a few useful scripts to help you manage docker and run the various quality scripts.
 
-You can view their description inside the `composer.json` file (look for `scripts-descriptions`), but here is a quick overview of the main ones:
+You can list them by running
 
-- `composer serve`: Runs a local web server on port 8000. Run this command and go to http://localhost:8000 to see the magic happen.
-- `composer testdox`: Runs the unit tests using the `testdox` format (it's better looking than the default one).
-- `composer coverage-html`: Generates a code coverage report in HTML format inside the `doc/` directory.
-- `composer qualy:infection`: Generates a mutation testing report in HTML format at `tmp/infection.html`.
-- `composer clean`: Runs phpcbf to automatically fix code formatting issues.
-- `composer refactor`: Runs Rector to automatically refactor your code. **Warning:** This is a very powerful tool that can break your code. Use `composer refactor-dry` to preview the changes before applying them.
-- `composer fulltest`: Runs the full set of tests (unit tests, static analysis tools and mutation testing).
-
-## Docker
-
-The project comes with a `Makefile` to help you manage your Docker container:
-
-- `make build` : Builds the Docker image
-- `make start` : Starts the Docker container (go to http://localhost:8080 to see your app live)
-- `make stop` : Stops the Docker container
-- `make restart` : Restarts the Docker container
-- `make rebuild` : Rebuilds the Docker image and restarts the container
-- `make remove` : Removes the Docker container
-- `make cli` : Access a command line the container (useful to run the various composer scripts)
-- `make logs` : Displays the logs of the Docker container
-- `make clean` : Cleans the docker environment
+```bash
+make help
+```
 
 ## Customize your app
 
