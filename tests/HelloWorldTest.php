@@ -13,6 +13,6 @@ final class HelloWorldTest extends TestCase
     {
         $foo = new HelloWorld();
 
-        self::assertEquals('Hello World', $foo->helloWorld());
+        self::assertEquals('Hello, world!', $foo->helloWorld());
     }
 }

@@ -8,6 +8,6 @@ final readonly class HelloWorld
 {
     public function helloWorld(): string
     {
-        return 'Hello World';
+        return 'Hello, world!';
     }
 }

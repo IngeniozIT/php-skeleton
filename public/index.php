@@ -2,28 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * PHP Skeleton Application Entry Point
- * 
- * This serves as the main entry point for web requests.
- * It demonstrates basic routing, error handling, and integration
- * with the application classes.
- */
-
-// Ensure we're running on a supported PHP version
-if (PHP_VERSION_ID < 80400) {
-    http_response_code(500);
-    echo 'This application requires PHP 8.4 or higher. Current version: ' . PHP_VERSION;
-    exit(1);
-}
-
-// Load Composer autoloader
-if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    http_response_code(500);
-    echo 'Composer dependencies not installed. Please run: composer install';
-    exit(1);
-}
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\HelloWorld;
@@ -32,236 +10,46 @@ use App\HelloWorld;
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-// Set content type for web responses
-header('Content-Type: text/html; charset=UTF-8');
-
-// Simple router based on request path
-$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-
-try {
-    match ($requestPath) {
-        '/' => renderHomePage(),
-        '/hello' => renderHelloPage(),
-        '/health' => renderHealthCheck(),
-        '/phpinfo' => renderPhpInfo(),
-        default => renderNotFound(),
-    };
-} catch (Throwable $e) {
-    renderError($e);
-}
-
-/**
- * Render the home page
- */
-function renderHomePage(): void
-{
-    echo <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PHP Skeleton Application</title>
-        <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 40px; line-height: 1.6; }
-            .container { max-width: 800px; margin: 0 auto; }
-            .header { text-align: center; margin-bottom: 40px; }
-            .routes { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
-            .route { margin: 10px 0; }
-            .route a { color: #007bff; text-decoration: none; }
-            .route a:hover { text-decoration: underline; }
-            .info { background: #e7f3ff; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>🚀 PHP Skeleton Application</h1>
-                <p>A clean, quality-focused PHP project foundation</p>
-            </div>
-            
-            <div class="info">
-                <strong>Welcome!</strong> This skeleton includes:
-                <ul>
-                    <li>PHP 8.4+ with strict typing</li>
-                    <li>Comprehensive quality tools (PHPUnit, PHPStan, Psalm, etc.)</li>
-                    <li>Docker support (CLI and Web modes)</li>
-                    <li>CI/CD pipeline with GitHub Actions</li>
-                    <li>Automated testing and code coverage</li>
-                </ul>
-            </div>
-
-            <div class="routes">
-                <h3>Available Routes:</h3>
-                <div class="route">
-                    <strong><a href="/">/</a></strong> - This home page
-                </div>
-                <div class="route">
-                    <strong><a href="/hello">/hello</a></strong> - Demo using HelloWorld class
-                </div>
-                <div class="route">
-                    <strong><a href="/health">/health</a></strong> - Application health check
-                </div>
-                <div class="route">
-                    <strong><a href="/phpinfo">/phpinfo</a></strong> - PHP configuration info
-                </div>
-            </div>
-
-            <footer style="text-align: center; margin-top: 40px; color: #6c757d;">
-                <p>Built with ❤️ using the PHP Skeleton</p>
-                <p>PHP Version: <?= PHP_VERSION ?> | Environment: <?= php_sapi_name() ?></p>
-            </footer>
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My awesome PHP Application</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; line-height: 1.6; }
+        .container { max-width: min(70vw, 800px); min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; gap: 2.4rem; }
+        .header { text-align: center; }
+        .header h1 { font-size: min(4vw, 2.6rem); margin-bottom: 0; }
+        .subtitle { font-size: min(2.5vw, 1.6rem); color: #6c757d; font-style: italic; margin-top: 0; }
+        .info { background: #e7f3ff; padding: 12px 32px; border-radius: 4px; border-left: 4px solid #007bff; font-size: min(2vw, 1.4rem); }
+        .footer { text-align: center; color: #6c757d; font-size: min(1.6vw, 1.2rem); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 My awesome PHP Application</h1>
+            <p class="subtitle">A clean, quality-focused, PHP project foundation</p>
         </div>
-    </body>
-    </html>
-    HTML;
-}
-
-/**
- * Render the hello page using the HelloWorld class
- */
-function renderHelloPage(): void
-{
-    $helloWorld = new HelloWorld();
-    $message = $helloWorld->helloWorld();
-    
-    echo <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hello World - PHP Skeleton</title>
-        <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 40px; line-height: 1.6; text-align: center; }
-            .message { font-size: 2em; color: #28a745; margin: 40px 0; }
-            .back { margin-top: 30px; }
-            .back a { color: #007bff; text-decoration: none; }
-        </style>
-    </head>
-    <body>
-        <h1>Hello World Demo</h1>
-        <div class="message">
-            "<?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?>"
+        
+        <div class="info">
+            <p><strong><?php echo new HelloWorld()->helloWorld() ?></strong></p>
+            <p>This project includes:</p>
+            <ul>
+                <li>Automated testing</li>
+                <li>Code coverage</li>
+                <li>Mutation testing</li>
+                <li>Code quality tools (PHPStan, Psalm, etc.)</li>
+                <li>Docker support (+ docker-compose)</li>
+                <li>CI/CD pipeline with GitHub Actions</li>
+            </ul>
         </div>
-        <p>This message was generated by the <code>App\HelloWorld</code> class.</p>
-        <div class="back">
-            <a href="/">← Back to Home</a>
-        </div>
-    </body>
-    </html>
-    HTML;
-}
 
-/**
- * Render health check endpoint
- */
-function renderHealthCheck(): void
-{
-    header('Content-Type: application/json');
-    
-    $health = [
-        'status' => 'OK',
-        'timestamp' => date('c'),
-        'php_version' => PHP_VERSION,
-        'memory_usage' => memory_get_usage(true),
-        'memory_peak' => memory_get_peak_usage(true),
-        'extensions' => [
-            'mbstring' => extension_loaded('mbstring'),
-            'json' => extension_loaded('json'),
-            'curl' => extension_loaded('curl'),
-            'zip' => extension_loaded('zip'),
-        ],
-    ];
-    
-    echo json_encode($health, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-}
-
-/**
- * Render PHP info (only in development)
- */
-function renderPhpInfo(): void
-{
-    // Only show phpinfo in development environments
-    if (getenv('APP_ENV') === 'production') {
-        http_response_code(403);
-        echo 'PHP Info is disabled in production environments.';
-        return;
-    }
-    
-    phpinfo();
-}
-
-/**
- * Render 404 page
- */
-function renderNotFound(): void
-{
-    http_response_code(404);
-    
-    echo <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>404 Not Found - PHP Skeleton</title>
-        <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 40px; line-height: 1.6; text-align: center; }
-            .error { color: #dc3545; font-size: 1.5em; margin: 30px 0; }
-        </style>
-    </head>
-    <body>
-        <h1>404 - Page Not Found</h1>
-        <div class="error">The requested page could not be found.</div>
-        <p><a href="/">← Back to Home</a></p>
-    </body>
-    </html>
-    HTML;
-}
-
-/**
- * Render error page
- */
-function renderError(Throwable $e): void
-{
-    http_response_code(500);
-    
-    // In production, don't expose error details
-    $showDetails = getenv('APP_ENV') !== 'production';
-    
-    echo <<<HTML
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Error - PHP Skeleton</title>
-        <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 40px; line-height: 1.6; }
-            .error { background: #f8d7da; color: #721c24; padding: 20px; border-radius: 5px; border-left: 4px solid #dc3545; }
-            .details { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; font-family: monospace; font-size: 14px; }
-        </style>
-    </head>
-    <body>
-        <h1>Application Error</h1>
-        <div class="error">
-            <strong>An error occurred while processing your request.</strong>
-    HTML;
-    
-    if ($showDetails) {
-        echo '<div class="details">';
-        echo '<strong>Error:</strong> ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . '<br>';
-        echo '<strong>File:</strong> ' . htmlspecialchars($e->getFile(), ENT_QUOTES, 'UTF-8') . '<br>';
-        echo '<strong>Line:</strong> ' . $e->getLine() . '<br>';
-        echo '<strong>Stack Trace:</strong><br><pre>' . htmlspecialchars($e->getTraceAsString(), ENT_QUOTES, 'UTF-8') . '</pre>';
-        echo '</div>';
-    }
-    
-    echo <<<HTML
-        </div>
-        <p><a href="/">← Back to Home</a></p>
-    </body>
-    </html>
-    HTML;
-}
+        <footer class="footer">
+            <p>Built with ❤️ using <a href="https://github.com/IngeniozIT/php-skeleton"><code>ingenioz-it/php-skeleton</code></a></p>
+        </footer>
+    </div>
+</body>
+</html>
