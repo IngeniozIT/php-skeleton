@@ -1,4 +1,7 @@
-FROM php:8.4-cli AS php-base
+ARG PHP_VERSION=8.4
+FROM php:${PHP_VERSION}-cli AS php-base
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -9,7 +12,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libxml2-dev \
         libonig-dev \
         bash-completion \
-        vim \
         && rm -rf /var/lib/apt/lists/*
 
 FROM php-base AS php-extensions

@@ -31,7 +31,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "App\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -41,8 +42,8 @@
         ],
         "test": "vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
         "testdox": "@test --testdox",
-        "coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-html ./tmp/code-coverage",
-        "coverage-xml": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-clover ./tmp/code-coverage/coverage.xml",
+        "coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-html ./doc/code-coverage",
+        "coverage-xml": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-clover ./doc/code-coverage/coverage.xml",
         "phpcbf": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
         "rector": "vendor/bin/rector process --config ./quality/rector.php",
         "rector-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run",
@@ -54,7 +55,7 @@
         "infection": "XDEBUG_MODE=coverage vendor/bin/infection -j$(nproc) --configuration=./quality/infection.json.dist",
         "phpmd": "vendor/bin/phpmd src/ text quality/phpmd.xml.dist",
         "doc": [
-            "@coverage-html",
+            "@coverage-html --testdox-html ./doc/documentation.html",
             "@infection",
             "echo 'OK'"
         ],

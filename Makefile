@@ -1,58 +1,66 @@
-# Create the .env file if it doesn't exist
-ifeq ($(wildcard infra/.env),)
-$(shell cp infra/.env.dist infra/.env)
-$(info $(shell printf "\033[32mINFO: no \".env\" file was found at infra/.env, it has been created from infra/.env.dist\033[0m\n"))
-endif
+# Create the .env files if they don't exist
+define copy_env_if_missing
+$(if $(wildcard $(1)),, \
+	$(shell cp $(1).dist $(1)) \
+	$(info $(shell printf "\033[32mINFO: \"$(1)\" file was created from $(1).dist\033[0m\n")) \
+)
+endef
+ENV_DIST_FILES := $(shell find infra -maxdepth 2 -name "*.env.dist" 2>/dev/null)
+ENV_FILES := $(ENV_DIST_FILES:.env.dist=.env)
+$(foreach env_file,$(ENV_FILES),$(call copy_env_if_missing,$(env_file)))
 
-# load the .env
+# load the environment variables
 -include infra/.env
+-include infra/$(ENVIRONMENT)/.env
 
-PROJECT_NAME=$(shell grep '"name"' composer.json | head -1 | sed 's/.*"name":\s*"\([^"]*\)".*/\1/' | sed 's/\//-/g')-${PROJECT_TYPE}
-DOCKERFILE=infra/${PROJECT_TYPE}.Dockerfile
+export ENVIRONMENT
+export PHP_VERSION
+PROJECT_NAME := $(shell grep -E '"name":' composer.json | head -n 1 | cut -d'"' -f4 | tr '/' '-')
+export PROJECT_NAME
+COMPOSE_FILE = infra/$(ENVIRONMENT)/docker-compose.yml
+COMPOSE_CMD = docker compose -f $(COMPOSE_FILE)
+DOCKER_NAME = app-$(ENVIRONMENT)
 
-build: # Build the Docker image
-	@docker ps -a -q --filter "name=$(PROJECT_NAME)" | grep -q . && docker rm $(PROJECT_NAME) || true
-	@docker build -t $(PROJECT_NAME) -f $(DOCKERFILE) --build-arg USER_ID=$(shell id -u) --build-arg GROUP_ID=$(shell id -g) .
-
-start: stop # Start the Docker container
-	@if ! docker ps -q --filter "name=$(PROJECT_NAME)" | grep -q .; then \
-		make build; \
-	fi
-	@if [ "$(PROJECT_TYPE)" = "cli" ]; then \
-		docker run -it -d --name $(PROJECT_NAME) --user $(shell id -u):$(shell id -g) --env-file infra/.env -v $(PWD):/var/www/html $(PROJECT_NAME); \
-	else \
-		docker run -d -p $(WEB_PORT):80 --name $(PROJECT_NAME) --user $(shell id -u):$(shell id -g) --env-file infra/.env -v $(PWD):/var/www/html $(PROJECT_NAME); \
-	fi
-	@make exec composer install
+start: # Start the Docker container
+	@$(COMPOSE_CMD) up -d $(DOCKER_NAME)
+	@$(COMPOSE_CMD) exec $(DOCKER_NAME) composer install
 
 stop: # Stop the Docker container
-	@docker ps -q --filter "name=$(PROJECT_NAME)" | grep -q . && docker stop $(PROJECT_NAME) || true
+	@$(COMPOSE_CMD) down
 
 restart: stop start # Restart the Docker container
 
+cli: # Run a terminal inside the container
+	@$(COMPOSE_CMD) up -d $(DOCKER_NAME)
+	$(COMPOSE_CMD) exec $(DOCKER_NAME) /bin/bash
+
+exec: # Execute a command inside the container
+	@$(COMPOSE_CMD) exec $(DOCKER_NAME) $(filter-out $@,$(MAKECMDGOALS))
+
+build: # Build the Docker image
+	@$(COMPOSE_CMD) build --no-cache
+
 rebuild: stop build start # Rebuild the Docker image and start the container
 
-remove: stop # Remove the Docker container
-	@docker ps -a -q --filter "name=$(PROJECT_NAME)" | grep -q . && docker rm $(PROJECT_NAME) || true
-
-cli: # Run a terminal inside the container
-	@if ! docker ps -q --filter "name=$(PROJECT_NAME)" | grep -q .; then \
-		make start; \
-	fi
-	@docker exec -it $(PROJECT_NAME) /bin/bash
+remove: # Remove the Docker container and volumes
+	@$(COMPOSE_CMD) down -v --remove-orphans
 
 logs: # Show the Docker container's logs
-	@docker logs -f $(PROJECT_NAME)
+	@$(COMPOSE_CMD) logs -f
 
 clean: # Clean the Docker system
 	@docker system prune -f
 
-exec: # Execute a command inside the container
-	@docker exec -it $(PROJECT_NAME) $(filter-out $@,$(MAKECMDGOALS))
+status: # Show container status
+	@echo "\033[33mProject name:\033[0m\\t\033[32m$(PROJECT_NAME)\033[0m"
+	@echo "\033[33mEnvironment:\033[0m\\t\033[32m$(ENVIRONMENT)\033[0m"
+	@echo "\033[33mDocker name:\033[0m\\t\033[32m$(PROJECT_NAME)-$(ENVIRONMENT)\033[0m"
+	@echo "\033[33mStatus:\033[0m"
+	@$(COMPOSE_CMD) ps
 
 help: # Display this help
 	@echo ""
-	@echo "\033[33mDocker commands:\033[0m"
+	@echo "\033[33mDocker Compose commands:\033[0m"
 	@echo ""
 	@awk '/^[a-zA-Z_-]+:.*#/ { target = $$1; gsub(/:/, "", target); comment = ""; for(i=2; i<=NF; i++) if($$i ~ /^#/) { for(j=i+1; j<=NF; j++) comment = comment " " $$j; break } printf "\033[36mmake %-10s\033[0m%s\n", target, comment }' $(MAKEFILE_LIST)
 	@echo ""
@@ -64,4 +72,4 @@ help: # Display this help
 %:
 	@:
 
-.PHONY: start stop restart rebuild remove cli exec logs clean
+.PHONY: start stop restart cli exec build rebuild remove logs clean status

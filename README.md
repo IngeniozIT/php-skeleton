@@ -26,7 +26,7 @@ It contains pretty much everything you need to start a new project :
 - **Infrastructure**
   - Docker support
     - A Makefile to manage docker commands with ease
-  - GitHub workflows to automatically run the tests and quality tools on every push and pull request
+  - GitHub Actions to automatically run the tests and quality tools on every push and pull request
     - It also uploads a code coverage report to [CodeCov](https://codecov.io/)
 
 ## Installation
@@ -60,7 +60,7 @@ composer install
 ### 2. Run the tests
 
 ```bash
-make test
+composer testdox
 ```
 
 ### 3. Time to code
@@ -71,13 +71,36 @@ The previous steps went well ?
 
 ## Scripts
 
-The project comes with a few useful scripts to help you manage docker and run the various quality scripts.
+The project comes with a few useful scripts to help you manage docker and run the various quality tools.
 
 You can list them by running
 
 ```bash
 make help
 ```
+
+### Important scripts
+
+- `composer testdox`: run the tests
+- `composer fulltest`: run all the quality tools
+- `composer doc`: generate the documentation from the tests (including mutation testing and code coverage), and puts it inside the `doc` folder
+
+And if you are using docker:
+- `make start/stop/restart`: start/stop/restart the Docker container
+- `make cli`: open a terminal inside the Docker container (run `exit` to close it)
+- `make exec {command}`: execute a command inside the Docker container
+
+## Environments
+
+This project supports multiple environments.
+
+Two environments are available from the start:
+- `cli-dev`: a cli project
+- `web-dev`: a web project
+
+You can switch between environments by changing the `ENVIRONMENT` variable inside the `infra/.env` file.
+
+You can create new environments by creating a new folder inside the `infra/` folder, with a `docker-compose.yml` file inside it.
 
 ## Customize your app
 

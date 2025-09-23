@@ -1,0 +1,26 @@
+services:
+  app-web-dev:
+    build:
+      context: ../..
+      dockerfile: infra/web-dev/Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    image: ${PROJECT_NAME}-web-dev
+    container_name: ${PROJECT_NAME}-web-dev
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    env_file:
+      - ../.env
+      - .env
+    volumes:
+      - ../..:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3

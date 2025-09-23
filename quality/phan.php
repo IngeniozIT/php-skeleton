@@ -5,6 +5,7 @@ return [
     'processes' => 16,
     'directory_list' => [
         'src/',
+        'tests/',
         'vendor/',
     ],
     'exclude_analysis_directory_list' => [

@@ -4,13 +4,9 @@
         "directories": [
             "./src"
         ],
-        "excludes": [
-            "/Test\\.php/"
-        ]
     },
     "logs": {
-        "text": "../tmp/mutation-testing/infection.txt",
-        "html": "../tmp/mutation-testing/infection.html"
+        "html": "../doc/mutation-testing.html"
     },
     "mutators": {
         "@default": true

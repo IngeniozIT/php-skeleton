@@ -3,6 +3,7 @@ tmp/
 doc/
 
 infra/.env
+infra/*/.env
 
 .idea/
 .vscode/

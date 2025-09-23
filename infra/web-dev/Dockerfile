@@ -1,4 +1,7 @@
-FROM php:8.4-apache AS php-base
+ARG PHP_VERSION=8.4
+FROM php:${PHP_VERSION}-apache AS php-base
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
