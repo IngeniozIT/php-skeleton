@@ -4,25 +4,32 @@ FROM php:${PHP_VERSION}-apache
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
-        unzip \
-        curl \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y --no-install-recommends \
+        $PHPIZE_DEPS \
+        zlib1g-dev \
         libzip-dev \
         libxml2-dev \
         libonig-dev \
+        linux-headers-amd64 \
         git \
+        unzip \
+        curl \
+        libzip5 \
     && docker-php-ext-install -j$(nproc) pcntl zip mbstring xml \
     && pecl install ast \
     && docker-php-ext-enable ast \
-    && git clone --depth 1 --branch master https://github.com/xdebug/xdebug.git /tmp/xdebug \
-    && cd /tmp/xdebug \
-    && phpize \
-    && ./configure \
-    && make \
-    && make install \
+    && sh -c 'pecl install xdebug 2>&1 || { \
+        git clone --depth 1 --branch master https://github.com/xdebug/xdebug.git /tmp/xdebug && \
+        cd /tmp/xdebug && \
+        phpize && \
+        ./configure && \
+        make -j$(nproc) && \
+        make install && \
+        cd / && \
+        rm -rf /tmp/xdebug; \
+    }' \
     && docker-php-ext-enable xdebug \
-    && cd / \
-    && rm -rf /tmp/xdebug \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer from official image
@@ -47,7 +54,7 @@ RUN { \
         echo '</VirtualHost>'; \
     } > /etc/apache2/sites-available/000-default.conf
 
-# Configure PHP for development
+# Configure PHP for development and Xdebug
 RUN { \
         echo 'memory_limit=512M'; \
         echo 'max_execution_time=30'; \
@@ -62,15 +69,13 @@ RUN { \
         echo 'opcache.enable=1'; \
         echo 'opcache.revalidate_freq=0'; \
         echo 'opcache.validate_timestamps=1'; \
-    } > /usr/local/etc/php/conf.d/development.ini
-
-# Configure Xdebug (disabled by default, enable with XDEBUG_MODE env var)
-RUN { \
+        echo ''; \
+        echo '; Xdebug configuration (disabled by default, enable with XDEBUG_MODE env var)'; \
         echo 'xdebug.start_with_request=trigger'; \
         echo 'xdebug.client_host=host.docker.internal'; \
         echo 'xdebug.client_port=9003'; \
         echo 'xdebug.log=/tmp/xdebug.log'; \
-    } > /usr/local/etc/php/conf.d/xdebug.ini
+    } > /usr/local/etc/php/conf.d/development.ini
 
 # Set environment variables
 ENV COMPOSER_ALLOW_SUPERUSER=1
