@@ -19,8 +19,10 @@ It contains pretty much everything you need to start a new project :
 
 - **Code quality**
   - A working unit test (using [PHPUnit](https://github.com/sebastianbergmann/phpunit)) to bootstrap your coding experience
-  - Static analyis tools ([phpcs](https://github.com/squizlabs/PHP_CodeSniffer), [phpstan](https://github.com/phpstan/phpstan), [psalm](https://github.com/vimeo/psalm), [phpmd](https://github.com/phpmd/phpmd) and [phan](https://github.com/phan/phan)) to enforce the quality of your code
   - A mutation testing framework ([Infection](https://github.com/infection/infection)) to enforce the quality of your tests
+  - A linter ([phpcs](https://github.com/squizlabs/PHP_CodeSniffer)) to make sure your code respects the PSR standards
+  - Static analysis ([phpstan](https://github.com/phpstan/phpstan)) to check for errors
+  - Code smell check ([phpmd](https://github.com/phpmd/phpmd)) to check if your code needs improvement
   - An automated refactoring tool ([Rector](https://github.com/rectorphp/rector)) to help you keep your code up to date
   - Composer scripts to easily use all the above
 - **Infrastructure**
@@ -39,19 +41,19 @@ composer create-project ingenioz-it/php-skeleton {PROJECT_NAME}
 
 ## Requirements
 
-PHP 8.4+ or Docker.
+PHP 8.5+ or Docker.
 
 ## Getting started
 
-### 0. (if you are using docker)
+### 1. Install the dependencies
 
-Create the Docker container and start a shell inside it:
+If you are using docker:
 
 ```bash
-make cli
+make install
 ```
 
-### 1. Install the dependencies
+If you are using your local environment:
 
 ```bash
 composer install
@@ -59,8 +61,16 @@ composer install
 
 ### 2. Run the tests
 
+If you are using docker:
+
 ```bash
-composer testdox
+make test
+```
+
+If you are using your local environment:
+
+```bash
+composer fulltest
 ```
 
 ### 3. Time to code
@@ -81,14 +91,22 @@ make help
 
 ### Important scripts
 
+For a complete list of the available commands:
+
+```bash
+make help
+```
+
+The main scripts are:
+
 - `composer testdox`: run the tests
 - `composer fulltest`: run all the quality tools
 - `composer doc`: generate the documentation from the tests (including mutation testing and code coverage), and puts it inside the `doc` folder
 
 And if you are using docker:
 - `make start/stop/restart`: start/stop/restart the Docker container
-- `make cli`: open a terminal inside the Docker container (run `exit` to close it)
-- `make exec {command}`: execute a command inside the Docker container
+- `make bash`: open a terminal inside the Docker container (run `exit` to close it)
+- `make exec -- {command}`: execute a command inside the Docker container
 
 ## Environments
 
