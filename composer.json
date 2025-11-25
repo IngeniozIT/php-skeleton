@@ -12,14 +12,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.4"
+        "php": ">=8.5"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
         "squizlabs/php_codesniffer": "*",
         "phpstan/phpstan": "*",
-        "vimeo/psalm": "*",
-        "phan/phan": "*",
         "infection/infection": "*",
         "phpmd/phpmd": "*",
         "rector/rector": "*"
@@ -42,52 +40,44 @@
         ],
         "test": "vendor/bin/phpunit -c ./quality/phpunit.xml.dist",
         "testdox": "@test --testdox",
+        "mutation": "XDEBUG_MODE=coverage vendor/bin/infection -j$(nproc) --configuration=./quality/infection.json.dist",
+        "fulltest": [
+          "@test",
+          "@mutation",
+          "@lint",
+          "@stan",
+          "@smells",
+          "echo 'OK'"
+        ],
+        "doc": [
+          "@coverage-html --testdox-html ./doc/documentation.html",
+          "@mutation",
+          "echo 'OK'"
+        ],
         "coverage-html": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-html ./doc/code-coverage",
         "coverage-xml": "XDEBUG_MODE=coverage vendor/bin/phpunit -c ./quality/phpunit.xml.dist --coverage-clover ./doc/code-coverage/coverage.xml",
-        "phpcbf": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
-        "rector": "vendor/bin/rector process --config ./quality/rector.php",
-        "rector-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run",
-        "phpcs": "vendor/bin/phpcs --standard=./quality/phpcs.xml.dist",
-        "phpstan": "vendor/bin/phpstan analyze -c ./quality/phpstan.neon.dist",
-        "psalm": "vendor/bin/psalm --no-cache --config ./quality/psalm.xml.dist",
-        "phan": "php -d extension=ast.so -d extension=pcntl.so -n vendor/bin/phan --config-file ./quality/phan.php",
-        "phan-silent": "vendor/bin/phan --no-progress-bar --config-file ./quality/phan.php",
-        "infection": "XDEBUG_MODE=coverage vendor/bin/infection -j$(nproc) --configuration=./quality/infection.json.dist",
-        "phpmd": "vendor/bin/phpmd src/ text quality/phpmd.xml.dist",
-        "doc": [
-            "@coverage-html --testdox-html ./doc/documentation.html",
-            "@infection",
-            "echo 'OK'"
-        ],
-        "fulltest": [
-            "@test",
-            "@infection",
-            "@phpcs",
-            "@phpmd",
-            "@phpstan",
-            "@psalm",
-            "@phan",
-            "echo 'OK'"
-        ]
+        "lint": "vendor/bin/phpcs --standard=./quality/phpcs.xml.dist",
+        "lint-fix": "vendor/bin/phpcbf --standard=./quality/phpcs.xml.dist",
+        "stan": "vendor/bin/phpstan analyze -c ./quality/phpstan.neon.dist",
+        "smells": "vendor/bin/phpmd src/ text quality/phpmd.xml.dist",
+        "refactor": "vendor/bin/rector process --config ./quality/rector.php",
+        "refactor-dry": "vendor/bin/rector process --config ./quality/rector.php --dry-run"
     },
     "scripts-descriptions": {
         "serve": "Run a local web server",
-        "test": "Run unit tests",
-        "testdox": "Run unit tests with testdox output",
-        "fulltest": "Run all quality tools",
+        "test": "Run the unit tests",
+        "testdox": "Run the unit tests with testdox output",
+        "mutation": "Run the mutation testing (infection)",
+        "fulltest": "Run all the quality tools",
         "doc": "Generate documentation",
         "coverage-html": "Generate HTML coverage report",
         "coverage-xml": "Generate XML coverage report",
-        "phpcbf": "Run phpcbf",
-        "phpcs": "Run phpcs",
-        "phpstan": "Run phpstan",
-        "psalm": "Run psalm",
-        "phan": "Run phan",
-        "phan-silent": "Run phan without progress bar",
-        "infection": "Run infection",
-        "phpmd": "Run phpmd",
-        "rector": "Refactor code with Rector",
-        "rector-dry": "Dry-run Rector"
+        "lint": "Run the linter (phpcs)",
+        "lint-fix": "Fix the linter errors (phpcbf)",
+        "stan": "Run the static analysis (phpstan)",
+        "smells": "Check for code smells (phpmd)",
+        "refactor": "Refactor code (rector)",
+        "refactor-dry": "Dry-run refactor (rector)"
     },
     "config": {
         "allow-plugins": {

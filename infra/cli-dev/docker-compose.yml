@@ -5,8 +5,6 @@ services:
       dockerfile: infra/cli-dev/Dockerfile
       args:
         PHP_VERSION: ${PHP_VERSION}
-        USER_ID: ${USER_ID:-1000}
-        GROUP_ID: ${GROUP_ID:-1000}
     image: ${PROJECT_NAME}-cli-dev
     container_name: ${PROJECT_NAME}-cli-dev
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"

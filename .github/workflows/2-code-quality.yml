@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup PHP with PECL extension
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
 
       - uses: actions/checkout@v3
 
@@ -32,20 +32,14 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Infection
-        run: composer infection
+      - name: Mutation testing
+        run: composer mutation
 
-      - name: PHP Code Sniffer
-        run: composer phpcs
+      - name: Code lint
+        run: composer lint
 
-      - name: PHPStan
-        run: composer phpstan
+      - name: Static analysis
+        run: composer stan
 
-      - name: Psalm
-        run: composer psalm
-
-      - name: Phan
-        run: composer phan-silent
-
-      - name: PHPMD
-        run: composer phpmd
+      - name: Code smells
+        run: composer smells
